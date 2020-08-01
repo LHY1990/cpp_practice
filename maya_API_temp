@@ -1,0 +1,23 @@
+#include <maya/MSimple.h>
+#include <maya/MIOStream.h>
+#include<maya/MGlobal.h>
+
+DeclareSimpleCommand(helloWorld, "Autodesk", "2019");
+
+void polyCubeMaking(const int& a) {
+
+    for (int i = 0; i < a; i++) {
+        MGlobal::executeCommand("polyCube");
+    }
+    
+}
+
+MStatus helloWorld::doIt(const MArgList& args)
+{
+    
+    polyCubeMaking(3);
+
+    return MS::kSuccess;
+}
+
+//마야에서 helloWorld; 라는 명령어로 실행하면된다.
