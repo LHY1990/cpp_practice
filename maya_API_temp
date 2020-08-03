@@ -1,6 +1,13 @@
 #include <maya/MSimple.h>
+//#include <maya/MIOStream.h>
+#include <maya/MGlobal.h>
+//MGlobal은 매우 중요한 헤더파일이다.
+#include <maya/MObjectHandle.h>
+#include <maya/MSelectionList.h>
 #include <maya/MIOStream.h>
-#include<maya/MGlobal.h>
+#include <maya/MObjectArray.h>
+#include<maya/MString.h>
+#include <string>
 
 DeclareSimpleCommand(helloWorld, "Autodesk", "2019");
 
@@ -9,15 +16,36 @@ void polyCubeMaking(const int& a) {
     for (int i = 0; i < a; i++) {
         MGlobal::executeCommand("polyCube");
     }
-    
+
 }
 
 MStatus helloWorld::doIt(const MArgList& args)
 {
+
+    MSelectionList array;
+    ////MObjectArray array;
+    //MObject tempSelected;
+
     
-    polyCubeMaking(3);
+
+    MGlobal::getActiveSelectionList(array);
+
+
+    for (int i = 0; i < array.length(); i++) {
+        //선택한 오브젝트들 갯수는 확실히 넘어온다.
+        //MGlobal::executeCommand("polyCube");
+        //cout << "hello world" << endl;
+        //MGlobal::displayInfo("hello world");
+        //printf("hello\n");
+
+        //std::string ordering = "poluCube -n \"temp_test\" ;";
+        MGlobal::executeCommand("polyCube - n \"temp_test\"");
+   
+    }
+
+    
 
     return MS::kSuccess;
 }
-
+//asdf
 //마야에서 helloWorld; 라는 명령어로 실행하면된다.
