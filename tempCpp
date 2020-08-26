@@ -1,0 +1,139 @@
+#include <maya/MSimple.h>
+//#include <maya/MIOStream.h>
+#include <maya/MGlobal.h>
+//MGlobal은 매우 중요한 헤더파일이다.
+#include <maya/MObjectHandle.h>
+#include <maya/MSelectionList.h>
+#include <maya/MIOStream.h>
+#include <maya/MObjectArray.h>
+#include<maya/MString.h>
+#include<maya/MDagPath.h>
+#include<maya/MFn.h>
+#include<maya/MItDependencyNodes.h>
+#include<maya/MItSelectionList.h>
+#include<maya/MFncamera.h>
+#include<string>
+#include<maya/MTime.h>
+#include<maya/MAnimControl.h>
+//#include<maya/MPxParticleAttributeMapperNode.h>
+
+
+#include <maya/MFnTransform.h>
+
+DeclareSimpleCommand(helloworld, "Autodesk", "2019");
+
+//void polyCubeMaking(const int& a) {
+//
+//    for (int i = 0; i < a; i++) {
+//        MGlobal::executeCommand("polyCube");
+//    }
+//
+//}
+
+
+
+
+
+MStatus helloworld::doIt(const MArgList& args)
+{
+    //MDagPath nodePath;
+    //MSelectionList singleObj;
+    //MGlobal::getActiveSelectionList(singleObj);
+    //////MObjectArray array;
+    ////MObject tempSelected;
+    ////MDagPath 
+    ////MString tempString = nodePath.getPath;
+    //nodePath = singleObj.getDagPath();
+
+    ////MGlobal::getActiveSelectionList(singleObj);
+    ////MString string=singleObj.getDagPath();
+    ////MGlobal::displayInfo(tempString);
+
+    ////for (int i = 0; i < array.length(); i++) {
+    ////    //선택한 오브젝트들 갯수는 확실히 넘어온다.
+    ////    //MGlobal::executeCommand("polyCube");
+    ////    //cout << "hello world" << endl;
+    ////    //MGlobal::displayInfo("hello world");
+    ////    //printf("hello\n");
+
+    ////    //std::string ordering = "poluCube -n \"temp_test\" ;";
+    ////    //MGlobal::executeCommand("polyCube - n \"temp_test\"");
+
+    ////}
+    /*MDagPath tempDag;
+    MSelectionList selectList;
+    MGlobal::getActiveSelectionList(selectList);
+
+
+    MItSelectionList iter(selectList);
+    int i = 0;
+    MString temp;
+
+    for (; !iter.isDone(); iter.next()) {
+        i++;
+
+        MString tempM=temp.asChar(i);
+        MGlobal::displayInfo(tempM);
+    }
+
+
+
+  
+
+*/
+    //MAnimControl::minTime();
+
+
+    /*MTime temp;
+    temp= MAnimControl::minTime();
+    double a = temp.value();
+    MString b;
+    b = a;
+    MGlobal::displayInfo(b);
+
+    MTime c;
+    c.setValue(44);
+    MAnimControl::setMinTime(c);
+    b.clear();
+
+    MTime temp1;
+
+   double number=temp1.uiUnit();
+   b = number;
+   MGlobal::displayInfo(b);*/
+
+ /*   MDagPath tempDag;
+    MSelectionList singleObj;
+    MGlobal::getActiveSelectionList(singleObj);*/
+
+   
+
+    //MSelectionList sList;                                //셀렉션리스트 인스턴스 생성.
+    //MString toMatch("pCube*");                           //문자열 변수 toMatch 생성
+    //MGlobal::getSelectionListByName(toMatch, sList);     //리스트 인스턴스에 이름과 매치되는 오브젝트 배정
+    //unsigned int ii = 0;                                 //반복문을위한 i 생성                  
+    //unsigned int nMatches = sList.length();              //반복문을 위한 리스트의 길이 nMatches 생성
+    //for (ii = 0; ii < nMatches; ++ii) {
+    //    MDagPath dp;                                     //MDagPath 인스턴스 dp 생성
+    //    sList.getDagPath(ii, dp);                        //순서를 in으로 받아 dp에 대그패스를 넘긴다.
+    //    cout << dp.fullPathName() << endl;
+    //    MGlobal::displayInfo(dp.fullPathName());
+    //}
+
+    int x = 0;
+    int y = 0;
+    //MGlobal::ListAdjustment listAdjustment = MGlobal::kReplaceList;
+    MGlobal::ListAdjustment listAdjustment = MGlobal::kRemoveFromList;
+    MGlobal::SelectionMethod  selectMethod = MGlobal::kSurfaceSelectMethod;
+    
+    MGlobal::selectFromScreen(0,0,1920, 1080, listAdjustment, selectMethod);
+
+    //MSelectionList marqueeList;
+    //MGlobal::getActiveSelectionList(marqueeList);
+
+    //MFnCamera cameraMine;
+    //cameraMine.create();
+    ////MFnCamera::create();
+    return MStatus::kSuccess;
+}
+//마야에서 helloWorld; 라는 명령어로 실행하면된다. 
