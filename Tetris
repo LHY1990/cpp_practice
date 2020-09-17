@@ -4,6 +4,7 @@
 #include<windows.h>
 #include<cstdlib>
 #include<ctime>
+#include<algorithm>
 
 #define TABLE_X 20
 #define TABLE_Y 38
@@ -32,7 +33,7 @@ void gotoxy(int x, int y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-//1번 블록
+//1번 블록, 바로위에 코맨트를 남기면 나중에 마우슬 올렷을때 설명이 든다.
 const int block1[4][4][4] = {
 	{
 		{0,0,0,0},
@@ -225,7 +226,18 @@ public:
 	void rotate() {
 		rotationCount = (rotationCount + 1) % 4;
 	}//0,1,2,3 으로 회전 표현
-
+	void setX(int x) {
+		this->x = x;
+	}
+	void setY(int y) {
+		this->y = y;
+	}
+	void setRotationCount(int r) {
+		this->rotationCount = r;
+	}
+	void setShape(int r, int y, int x, int value) {
+		this->shape[r][y][x] = value;
+	}
 
 };
 //대소문자가 다르다. 1번 블록 클래스
@@ -340,12 +352,38 @@ public:
 		cout << "\t\t" << "  @   @       @   @  @   @      @" << endl;
 		cout << "\t\t" << "  @   @@@@@   @   @   @ @@@  @@@ " << endl;
 		cout << "\n\n\t\t-시작하려면 아무키나 눌러주세요-" << endl;
-
+		//그냥 getchar만 해도 입력 받을때까지 대기라서 상관없긴 하다.
 		char tempCatcher = getchar();
 		if (tempCatcher) {
 			system("cls");
 		}
 	}
+
+};
+
+
+
+class backup {
+public:
+	//블럭백업
+	static void updateBlock(Block* source, Block& backupBlock) {
+		backupBlock.setX(source->getX());
+		backupBlock.setY(source->getY());
+		backupBlock.setRotationCount(source->getRotationCount());
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; j++) {
+				for (int k = 0; k < 4; k++) {
+					backupBlock.setShape(i, j, k, source->getShape(i, j, k));
+				}
+			}
+		}
+	}
+	//테이블백업
+	static void updateTable(std::vector<std::vector<int>>& source, std::vector<std::vector<int>>& backupTable) {
+		backupTable.resize(source.size(), std::vector<int>(source.size()));
+		copy(source.begin(), source.end(), backupTable.begin());
+	}
+
 
 };
 
@@ -418,8 +456,16 @@ public:
 			}
 		}
 	}
-	//블럳이동, 테이블에서 객체지우기
+	
 	void MoveBlock(int key) {
+
+		Block backupBlock;
+		std::vector<std::vector<int>> backupTable;
+		backup::updateBlock(blockObject, backupBlock);
+		backup::updateTable(table, backupTable);
+
+
+		//테이블에서 블럭 개체 지우기
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				int Y = j + blockObject->getY();
@@ -429,6 +475,7 @@ public:
 				}
 			}
 		}
+		//블럭이동
 		if (key == DOWN) {
 			blockObject->down();
 		}
@@ -441,9 +488,17 @@ public:
 			for (int j = 0; j < 4; j++) {
 				int Y = j + blockObject->getY();
 				int X = i + blockObject->getX();
+				int blockValue = blockObject->getShape(blockObject->getRotationCount(), i, j);
 
+				if (blockValue != 2) { continue; }
+				//여기서 부터 이어서 할것
 				if (table[Y][X] == 0) {
 					table[Y][X] = blockObject->getShape(blockObject->getRotationCount(), i, j);
+				}
+				else if (table[Y][X] == 1) {
+					copy(backupTable.begin(), backupTable.end(), table.begin());
+					blockObject->setRotationCount(backupBlock.getRotationCount());
+					return;
 				}
 			}
 		}
